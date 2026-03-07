@@ -1,52 +1,71 @@
-# Pre Entrega N°2 - Backend I
+# Entrega Final - Backend I
 
-Repositorio correspondiente a la Pre Entrega N°2 del curso Backend I (Coderhouse), realizado por María Macarena Damiani.
+Proyecto final de Backend I (Coderhouse) con persistencia principal en MongoDB, API REST completa de productos/carritos, paginación profesional y vistas con Handlebars.
 
-## Descripción del proyecto
-
-Este proyecto implementa una API REST para la gestión de productos y carritos de compra utilizando Node.js y Express. Los datos se persisten en archivos JSON.
-
-## Tecnologías utilizadas
+## Tecnologías
 
 - Node.js
 - Express
+- MongoDB + Mongoose
 - Express Handlebars
-- Socket.IO
 
-## Instalación y ejecución
+## Configuración
 
-1. Clonar el repositorio.
-2. Instalar dependencias: npm install
-3. Iniciar el servidor:node app.js
-4. La aplicación quedará disponible en: `http://localhost:8080`
+1. Instalar dependencias:
+	- `npm install`
+2. Crear archivo `.env` a partir de `.env.example`
+3. Configurar `MONGO_URI`
+4. Ejecutar:
+	- `npm start`
 
-## Funcionalidad en tiempo real (Socket.IO)
+Servidor: http://localhost:8080
 
-La vista en tiempo real está disponible en:
+## Estructura
 
-- `GET /realtimeproducts`
+- Todo el código de la aplicación está dentro de `src/`:
+	- `src/app.js`
+	- `src/config`
+	- `src/models`
+	- `src/managers`
+	- `src/routes`
+	- `src/views`
+	- `src/public`
 
-En esa pantalla, el cliente se conecta por Socket.IO y utiliza estos eventos:
-
-- `addProduct`: envía un nuevo producto al servidor.
-- `deleteProduct`: solicita eliminar un producto por ID.
-- `updateProducts`: el servidor emite la lista actualizada para todos los clientes conectados.
-- `error`: el servidor envía mensajes de error al cliente cuando ocurre una validación o falla.
-
-De esta forma, cuando un usuario agrega o elimina productos, todos los navegadores conectados a `/realtimeproducts` reciben la actualización sin recargar la página.
-
-## Endpoints
+## Endpoints API
 
 ### Productos
 
-- `GET /api/products`: obtiene todos los productos (acepta `?limit=n` para limitar resultados).
-- `GET /api/products/:pid`: obtiene un producto por su ID.
-- `POST /api/products`: crea un nuevo producto.
-- `PUT /api/products/:pid`: actualiza un producto existente por su ID.
-- `DELETE /api/products/:pid`: elimina un producto por su ID.
+- `GET /api/products`
+  - Query params opcionales: `limit`, `page`, `sort` (`asc`/`desc`), `query`
+	- `query` admite categoría o disponibilidad (ej: `query=ropa`, `query=true`, `query=false`)
+  - Respuesta:
+	 - `status`
+	 - `payload`
+	 - `totalPages`
+	 - `prevPage`
+	 - `nextPage`
+	 - `page`
+	 - `hasPrevPage`
+	 - `hasNextPage`
+	 - `prevLink`
+	 - `nextLink`
+- `GET /api/products/:pid`
+- `POST /api/products`
+- `PUT /api/products/:pid`
+- `DELETE /api/products/:pid`
 
 ### Carritos
 
-- `POST /api/carts`: crea un nuevo carrito vacío.
-- `GET /api/carts/:cid`: obtiene los productos de un carrito específico.
-- `POST /api/carts/:cid/product/:pid`: agrega un producto al carrito (incrementa `quantity` si ya existe).
+- `POST /api/carts`
+- `GET /api/carts/:cid` (incluye `populate` de productos)
+- `POST /api/carts/:cid/products/:pid`
+- `DELETE /api/carts/:cid/products/:pid`
+- `PUT /api/carts/:cid` (reemplaza arreglo completo de productos)
+- `PUT /api/carts/:cid/products/:pid` (actualiza solo `quantity`)
+- `DELETE /api/carts/:cid` (vacía carrito)
+
+## Vistas
+
+- `GET /products`: listado paginado + filtros/orden + botón agregar al carrito
+- `GET /products/:pid`: detalle completo + botón agregar al carrito
+- `GET /carts/:cid`: vista de carrito específico

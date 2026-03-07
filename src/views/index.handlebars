@@ -1,0 +1,75 @@
+<h1>Listado de Productos</h1>
+
+<div style="background: white; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+    <form action="/products" method="GET" style="display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); align-items: end;">
+        <div>
+            <label for="query"><strong>Filtro</strong></label>
+            <input id="query" name="query" type="text" value="{{query}}" placeholder="Categoría o available" style="width: 100%; padding: 8px;">
+        </div>
+
+        <div>
+            <label for="sort"><strong>Orden por precio</strong></label>
+            <select id="sort" name="sort" style="width: 100%; padding: 8px;">
+                <option value="" {{#if selectedNone}}selected{{/if}}>Sin orden</option>
+                <option value="asc" {{#if selectedAsc}}selected{{/if}}>Ascendente</option>
+                <option value="desc" {{#if selectedDesc}}selected{{/if}}>Descendente</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="limit"><strong>Limit</strong></label>
+            <input id="limit" name="limit" type="number" min="1" value="{{limit}}" style="width: 100%; padding: 8px;">
+        </div>
+
+        <input type="hidden" name="cid" value="{{cartId}}">
+
+        <button type="submit" style="background: #2c3e50; color: white; border: none; border-radius: 4px; padding: 10px; cursor: pointer;">
+            Aplicar
+        </button>
+    </form>
+</div>
+
+<div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+    <p><strong>Carrito actual:</strong> {{cartId}}</p>
+    <a href="/carts/{{cartId}}" style="background: #27ae60; color: white; text-decoration: none; padding: 10px 14px; border-radius: 5px;">Ver carrito</a>
+</div>
+
+<div class="product-list">
+    {{#each products}}
+    <div class="product-card">
+        <h3>{{this.title}}</h3>
+        <p><strong>ID:</strong> {{this._id}}</p>
+        <p>{{this.description}}</p>
+        <p><strong>Código:</strong> {{this.code}}</p>
+        <p class="price">${{this.price}}</p>
+        <p><strong>Stock:</strong> {{this.stock}}</p>
+        <p><strong>Categoría:</strong> {{this.category}}</p>
+        <p><strong>Estado:</strong> {{#if this.status}}Disponible{{else}}No disponible{{/if}}</p>
+
+        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+            <a href="/products/{{this._id}}?cid={{../cartId}}" style="background: #3498db; color: white; text-decoration: none; padding: 8px 10px; border-radius: 4px;">
+                Ver detalle
+            </a>
+            <button class="add-to-cart" data-cart-id="{{../cartId}}" data-product-id="{{this._id}}" style="background: #27ae60; color: white; border: none; border-radius: 4px; padding: 8px 10px; cursor: pointer;">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+    {{else}}
+    <p>No hay productos para mostrar con este filtro.</p>
+    {{/each}}
+</div>
+
+<div style="margin-top: 24px; display: flex; justify-content: center; gap: 12px; align-items: center;">
+    {{#if hasPrevPage}}
+        <a href="{{prevLink}}" style="background: #2c3e50; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px;">Anterior</a>
+    {{/if}}
+
+    <span><strong>Página {{page}}</strong> de <strong>{{totalPages}}</strong></span>
+
+    {{#if hasNextPage}}
+        <a href="{{nextLink}}" style="background: #2c3e50; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px;">Siguiente</a>
+    {{/if}}
+</div>
+
+<script src="/js/products.js"></script>

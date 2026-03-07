@@ -1,0 +1,31 @@
+{{#if notFound}}
+    <h1>Producto no encontrado</h1>
+    <a href="/products?cid={{cartId}}">Volver al listado</a>
+{{else}}
+    <h1>Detalle del Producto</h1>
+
+    <div class="product-card" style="max-width: 600px; margin: 0 auto;">
+        <h2>{{product.title}}</h2>
+        <p><strong>ID:</strong> {{product._id}}</p>
+        <p><strong>Descripción:</strong> {{product.description}}</p>
+        <p><strong>Código:</strong> {{product.code}}</p>
+        <p><strong>Precio:</strong> ${{product.price}}</p>
+        <p><strong>Stock:</strong> {{product.stock}}</p>
+        <p><strong>Categoría:</strong> {{product.category}}</p>
+        <p><strong>Estado:</strong> {{#if product.status}}Disponible{{else}}No disponible{{/if}}</p>
+
+        <div style="display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;">
+            <a href="/products?cid={{cartId}}" style="background: #3498db; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px;">
+                Volver al listado
+            </a>
+            <a href="/carts/{{cartId}}" style="background: #2c3e50; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px;">
+                Ver carrito
+            </a>
+            <button class="add-to-cart" data-cart-id="{{cartId}}" data-product-id="{{product._id}}" style="background: #27ae60; color: white; border: none; border-radius: 4px; padding: 8px 12px; cursor: pointer;">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/products.js"></script>
+{{/if}}

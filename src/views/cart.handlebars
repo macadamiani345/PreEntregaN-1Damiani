@@ -1,0 +1,27 @@
+{{#if notFound}}
+    <h1>Carrito no encontrado</h1>
+    <a href="/products">Ir a productos</a>
+{{else}}
+    <h1>Carrito {{cartId}}</h1>
+
+    <div style="margin-bottom: 16px;">
+        <a href="/products?cid={{cartId}}" style="background: #3498db; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px;">Volver a productos</a>
+    </div>
+
+    <div class="product-list">
+        {{#each products}}
+            <div class="product-card">
+                <h3>{{this.product.title}}</h3>
+                <p><strong>Producto ID:</strong> {{this.product._id}}</p>
+                <p><strong>Categoría:</strong> {{this.product.category}}</p>
+                <p><strong>Precio unitario:</strong> ${{this.product.price}}</p>
+                <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+                <p><strong>Subtotal:</strong> ${{this.subtotal}}</p>
+            </div>
+        {{else}}
+            <p>Este carrito no tiene productos.</p>
+        {{/each}}
+    </div>
+
+    <h2 style="text-align: right; margin-top: 20px;">Total: ${{total}}</h2>
+{{/if}}
